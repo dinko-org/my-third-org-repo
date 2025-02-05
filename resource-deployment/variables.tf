@@ -1,19 +1,23 @@
 variable "resource_group_name" {
   description = "The name of the resource group in which the resources will be created."
+  default = "rg-module-dinko"
 }
 
 variable "location" {
   description = "The location where the resources will be created."
+  default  = "northeurope"
 }
 
 variable "tags" {
   description = "A mapping of tags to assign to the resources."
   type        = map(string)
+  default = {Environment = "Development"}
 }
 
 variable "storage_account_name" {
   type        = string
   description = "The name of the storage account"
+  default     = "module-dinko-storage"
 }
 
 variable "account_tier" {
