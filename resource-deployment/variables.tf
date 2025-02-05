@@ -17,7 +17,7 @@ variable "tags" {
 variable "storage_account_name" {
   type        = string
   description = "The name of the storage account"
-  default     = "module-dinko-storage"
+  default     = "moduledinkostorage"
 }
 
 variable "account_tier" {
