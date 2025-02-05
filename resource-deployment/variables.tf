@@ -31,6 +31,3 @@ variable "account_replication_type" {
   description = "The Replication Type to use for this storage account"
   default     = "GRS"
 }
-
-
-
