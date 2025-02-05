@@ -6,6 +6,8 @@ on:
   pull_request:
     branches:
      - main
+    paths:
+      - 'resource-deployment/**'
   workflow_dispatch:
 
 permissions:
@@ -22,37 +24,24 @@ env:
  
   
 jobs:
-  terraform_plan:
-#    defaults:
-#      run:
-#        working-directory: ./resource-deployment
+  terraform-plan:
+    defaults:
+      run:
+        working-directory: ./resource-deployment
+    name: Terraform Plan
     runs-on: ubuntu-latest
     steps:
-
-      # Step 2: Authenticate with Azure using OIDC (More Secure than Secrets)
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: 'Run az commands'
-        run: |
-          az account show
-
-
      # Step 1: Checkout Repo
       - name: Checkout repository
         uses: actions/checkout@v4
         
-      # Step 3: Set up Terraform
+      # Step 2: Set up Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: latest
 
-      # Step 4: Initialize Terraform (Remote Backend)
+      # Step 3: Initialize Terraform (Remote Backend)
       - name: Terraform Init
         run: terraform init -backend-config="resource_group_name=${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}" -backend-config="storage_account_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}" -backend-config="container_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}"
 
@@ -66,7 +55,7 @@ jobs:
     #  - name: "Terraform List State"
      #   run: terraform state list
       
-      # Step 5: Terraform Plan
+      # Step 4: Terraform Plan
       - name: Terraform Plan
         run: terraform plan -no-color -out=tfplan
         
@@ -103,7 +92,7 @@ jobs:
         
   apply:
     name: "Terraform Apply"
-    needs: terraform_plan
+    needs: terraform-plan
     runs-on: ubuntu-latest
     environment: production  # This ensures manual approval is required
     defaults:
