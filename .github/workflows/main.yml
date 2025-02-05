@@ -1,8 +1,13 @@
 name: Terraform plan and apply with OIDC auth
 on:
-  push:
+ # push:
+ #   branches:
+ #     - main
+  pull_request:
     branches:
-      - main
+     - main
+    paths:
+       - 'resource-deployment/**'
   workflow_dispatch:
 
 permissions:
@@ -61,13 +66,13 @@ jobs:
       
       # Step 5: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -no-color -var-file="./tfvars/terraform.tfvars" -out=tfplan
         
       - name: "Upload Terraform Plan"
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: tfplan
+          path: ./resource-deployment/tfplan
 
           # Create string output of Terraform Plan
       - name: Create String Output
@@ -121,7 +126,7 @@ jobs:
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
         with:
-            name: tfplan
+            name: ./resource-deployment
 
       - name: "Terraform Apply (Manual Approval Required)"
         run: terraform apply tfplan
