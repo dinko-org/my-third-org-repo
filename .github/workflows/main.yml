@@ -120,7 +120,8 @@ jobs:
       - name: Download Terraform Plan
         uses: actions/download-artifact@v4
         with:
-            name: ./resource-deployment
+            name: tfplan
+            path: ./resource-deployment
 
       - name: "Terraform Apply (Manual Approval Required)"
         run: terraform apply tfplan
