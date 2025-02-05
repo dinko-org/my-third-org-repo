@@ -1,0 +1,132 @@
+name: Terraform plan and apply with OIDC auth
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+ # These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
+env:
+  ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+  ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+  ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+# ARM_USE_AZUREAD: true
+ 
+  
+jobs:
+  terraform_plan:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Step 2: Authenticate with Azure using OIDC (More Secure than Secrets)
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: 'Run az commands'
+        run: |
+          az account show
+
+
+     # Step 1: Checkout Repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      # Step 3: Set up Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: latest
+
+      # Step 4: Initialize Terraform (Remote Backend)
+      - name: Terraform Init
+        run: terraform init \
+            -backend-config="resource_group_name=${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}" \
+            -backend-config="storage_account_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}" \
+            -backend-config="container_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}"
+
+      - name: "Terraform Format Check"
+        run: terraform fmt -check
+        continue-on-error: true  # Fails if formatting is incorrect
+
+      - name: "Terraform Validate"
+        run: terraform validate  
+
+    #  - name: "Terraform List State"
+     #   run: terraform state list
+      
+      # Step 5: Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        
+      - name: "Upload Terraform Plan"
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: tfplan
+
+          # Create string output of Terraform Plan
+      - name: Create String Output
+        id: tf-plan-string
+        run: |
+          TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+        
+          delimiter="$(openssl rand -hex 8)"
+          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+          echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo '```terraform' >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "</details>" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> $GITHUB_OUTPUT
+        
+    # Publish Terraform Plan as task summary
+      - name: Publish Terraform Plan to Task Summary
+        env:
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+        run: |
+          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+          
+        
+  apply:
+    name: "Terraform Apply"
+    needs: terraform_plan
+    runs-on: ubuntu-latest
+    environment: production  # This ensures manual approval is required
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Azure Login using OIDC"
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: "Setup Terraform"
+        uses: hashicorp/setup-terraform@v3
+
+      - name: "Terraform Init"
+        run: terraform init \
+            -backend-config="resource_group_name=${{secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME}}" \
+            -backend-config="storage_account_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME}}" \
+            -backend-config="container_name=${{secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME}}"
+
+    # Download saved plan from artifacts  
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4
+        with:
+            name: tfplan
+
+      - name: "Terraform Apply (Manual Approval Required)"
+        run: terraform apply tfplan
