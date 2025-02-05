@@ -6,7 +6,6 @@ on:
   pull_request:
     branches:
      - main
-    
   workflow_dispatch:
 
 permissions:
@@ -24,9 +23,9 @@ env:
   
 jobs:
   terraform_plan:
-    defaults:
-      run:
-        working-directory: ./resource-deployment
+#    defaults:
+#      run:
+#        working-directory: ./resource-deployment
     runs-on: ubuntu-latest
     steps:
 
