@@ -1,17 +1,24 @@
 terraform {
+  required_version = ">=1.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.0"
+      version = "~>4.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "2.30.0"
     }
   }
-} /*
-provider "azurerm" {
-  use_oidc = true
-  features {}
-}
-
-backend "azurerm" {
+  backend "azurerm" {
     key      = "terraform.tfstate"
     use_oidc = true
   }
+}
+provider "azurerm" {
+  features {}
+  use_oidc = true
+}
+provider "azuread" {
+}
