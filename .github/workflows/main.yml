@@ -68,7 +68,7 @@ jobs:
       
       # Step 5: Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -no-color -var-file="./resource-deployment/tfvars/terraform.tfvars" -out=tfplan
+        run: terraform plan -no-color -out=tfplan
         
       - name: "Upload Terraform Plan"
         uses: actions/upload-artifact@v4
