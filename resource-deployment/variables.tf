@@ -8,13 +8,6 @@ variable "location" {
   default  = "westeurope"
 }
 
-variable "tags" {
-  description = "A mapping of tags to assign to the resources."
-  type        = map(string)
-  default = {Environment = "Development"
-             Owner = "Dinko"}
-}
-
 variable "storage_account_name" {
   type        = string
   description = "The name of the storage account"
