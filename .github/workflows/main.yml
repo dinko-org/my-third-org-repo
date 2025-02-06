@@ -63,6 +63,7 @@ jobs:
       
       # Step 4: Terraform Plan
       - name: Terraform Plan
+        id: plan
         run: terraform plan -no-color -out=tfplan
 
       - name: Update Pull Request
