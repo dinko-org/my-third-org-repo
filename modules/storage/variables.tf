@@ -22,8 +22,3 @@ variable "account_replication_type" {
   type = string
   description = "The Replication Type to use for this storage account"
 }
-
-variable "tags" {
-  type = map(string)
-  description = "A mapping of tags to assign to the resource"
-}
