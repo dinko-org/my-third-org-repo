@@ -131,6 +131,8 @@ jobs:
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
           
+      - name: View Plan Output
+        run: echo "${{ steps.plan.outputs.stdout }}"     
         
   apply:
     name: "Terraform Apply"
