@@ -5,13 +5,13 @@ variable "resource_group_name" {
 
 variable "location" {
   description = "The location where the resources will be created."
-  default  = "northeurope"
+  default  = "westeurope"
 }
 
 variable "tags" {
   description = "A mapping of tags to assign to the resources."
   type        = map(string)
-  default = {Environment = "Development"}
+  default = {Environment = "Development", Owner = "Dinko"}
 }
 
 variable "storage_account_name" {
