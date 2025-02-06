@@ -95,21 +95,31 @@ jobs:
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
               
-      - name: Azuriraj moj PR
-        if: github.event_name == 'pull_request'  
+      - name: Post Terraform Plan as PR Comment
+        uses: actions/github-script@v6
         env:
-          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
-        run: |
-          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
-          
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-      
+          PLAN: "terraform\n${{ steps.tf-plan-string.outputs.summary }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`terraform
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Triggered by: @${{ github.actor }}*`;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: output
-              })
+            })
                       
   apply:
     name: "Terraform Apply"
