@@ -86,13 +86,23 @@ jobs:
   
             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
   
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-      
+            # If we have a comment, update it, otherwise create a new one
+            if (botComment) {
+              github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output
+              })
+            } else {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+            }
+            
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
