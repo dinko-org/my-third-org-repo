@@ -11,7 +11,7 @@ variable "location" {
 variable "storage_account_name" {
   type        = string
   description = "The name of the storage account"
-  default     = "moduledinkostorage"
+  default     = "moduledinkolstorage"
 }
 
 variable "account_tier" {
