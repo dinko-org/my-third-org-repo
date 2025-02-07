@@ -17,3 +17,12 @@ variable "subnet_address_prefixes" {
   description = "The address prefix to use for the subnet."
   type = list(string)
 }
+variable "location" {
+  type = string
+  description = "The location/region where the vnet should be created"
+}
+
+variable "resource_group_name" {
+  type = string
+  description = "The name of the resource group in which to create vnet"
+}
