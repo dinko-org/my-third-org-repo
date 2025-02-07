@@ -25,3 +25,25 @@ variable "account_replication_type" {
   description = "The Replication Type to use for this storage account"
   default     = "ZRS"
 }
+
+variable "vnet_name" {
+  description = "The name of vnet."
+  default = "dinko-vnet"
+}
+
+variable "vnet_address_space" {
+  description = "The address space of the vnet."
+  default = ["192.168.0.0/16"]
+}
+
+variable "subnet_name" {
+  description = "The name of subnet."
+  default = "dinko-subnet"
+}
+
+variable "subnet_address_prefixes" {
+  description = "The address prefixes of the subnet."
+  default = ["192.168.1.0/24"]
+}
+
+
