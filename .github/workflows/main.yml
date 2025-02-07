@@ -20,8 +20,6 @@ env:
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-# ARM_USE_AZUREAD: true
- 
   
 jobs:
   terraform-plan:
@@ -40,7 +38,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
-          terraform_wrapper: true
+       #   terraform_wrapper: true
 
       # Step 3: Initialize Terraform (Remote Backend)
       - name: Terraform Init
@@ -62,8 +60,8 @@ jobs:
           tfsec_args: --soft-fail
           github_token: ${{ github.token }}
 
-    #  - name: "Terraform List State"
-     #   run: terraform state list
+      - name: "Terraform List State"
+        run: terraform state list
       
       # Step 4: Terraform Plan
       - name: Terraform Plan
