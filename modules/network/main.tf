@@ -10,3 +10,4 @@ resource "azurerm_subnet" "mysubnet" {
   resource_group_name  = module.resource-group.name
   virtual_network_name = azurerm_virtual_network.myvnet.name
   address_prefixes     = var.subnet_address_prefixes
+}
