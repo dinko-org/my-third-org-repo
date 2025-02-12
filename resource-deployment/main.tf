@@ -25,7 +25,7 @@ module "network" {
 
 module "key-vault" {
   source                   = "../modules/key-vault"
-  name                     = var.kv_name
+  kv_name                  = var.kv_name
   location                 = var.location
   resource_group_name      = module.resource-group.name
   sku_name                 = var.sku_name
