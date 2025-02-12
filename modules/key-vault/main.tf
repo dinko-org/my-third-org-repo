@@ -21,3 +21,14 @@ resource "azurerm_key_vault_access_policy" "dinkokvap" {
   storage_permissions = var.storage_permissions
 
 }
+
+resource "random_password" "windows_admin" {
+  length  = 16
+  special = true
+}
+
+resource "azurerm_key_vault_secret" "windows_password" {
+  name         = "windows-vm-password"
+  value        = random_password.windows_admin.result
+  key_vault_id = azurerm_key_vault.dinkokv.id
+}
