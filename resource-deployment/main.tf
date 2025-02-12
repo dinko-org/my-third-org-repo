@@ -23,13 +23,12 @@ module "network" {
   subnet_address_prefixes  = var.subnet_address_prefixes
 }
 
-module "key-vault" 
-{
-  source   = "../modules/key-vault"
-  name     = var.kv_name
-  location = var.location
+module "key-vault" {
+  source                   = "../modules/key-vault"
+  kv_name                  = var.kv_name
+  location                 = var.location
   resource_group_name      = module.resource-group.name
-  sku = var.sku_name
-  secret_permissions = var.secret_permissions
-  storage_permissions = var.storage_permissions
+  sku_name                 = var.sku_name
+  secret_permissions       = var.secret_permissions
+  storage_permissions      = var.storage_permissions
 }

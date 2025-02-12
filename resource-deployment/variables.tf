@@ -23,7 +23,7 @@ variable "account_tier" {
 variable "account_replication_type" {
   type        = string
   description = "The Replication Type to use for this storage account"
-  default     = "ZRS"
+  default     = "LRS"
 }
 
 variable "vnet_name" {
@@ -69,4 +69,10 @@ variable "storage_permissions" {
   default     = [
     "List" 
 ]
+}
+
+variable "sku_name" {
+  type        = string
+  description = "The Replication Type to use for this storage account"
+  default     = "standard"
 }

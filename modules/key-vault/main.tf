@@ -1,5 +1,10 @@
 data "azurerm_client_config" "current" {}
 
+# Retrieve the Azure AD User Object ID (User who owns the Key Vault)
+data "azuread_user" "kv_owner" {
+  user_principal_name = "dinko.listar@nordcloud.com"
+}
+
 resource "azurerm_key_vault" "dinkokv" {
   name                = var.kv_name
   location            = var.location
@@ -14,10 +19,29 @@ resource "azurerm_key_vault_access_policy" "dinkokvap" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
 
   # The object_id of the Managed Identity for the VM
-  object_id = data.azurerm_client_config.current.object_id
+ # object_id = data.azurerm_client_config.current.object_id
+  object_id = data.azuread_user.kv_owner.object_id
 
   secret_permissions = var.secret_permissions
   
   storage_permissions = var.storage_permissions
 
+}
+
+resource "random_password" "windows_admin" {
+  length  = 16
+  special = true
+}
+
+resource "azurerm_key_vault_secret" "windows_password" {
+  name         = "windows-vm-password"
+  value        = random_password.windows_admin.result
+  key_vault_id = azurerm_key_vault.dinkokv.id
+}
+
+resource "azurerm_role_assignment" "keyvault_secrets_access" {
+  scope                = azurerm_key_vault.dinkokv.id
+  role_definition_name = "Key Vault Secrets User"
+#  principal_id         = data.azurerm_client_config.current.object_id
+  principal_id         = data.azuread_user.kv_owner.object_id
 }
