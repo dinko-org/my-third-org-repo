@@ -6,6 +6,7 @@ resource "azurerm_key_vault" "dinkokvtf" {
   resource_group_name = var.resource_group_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = var.sku_name
+  purge_protection_enabled = false
 
 }
 
