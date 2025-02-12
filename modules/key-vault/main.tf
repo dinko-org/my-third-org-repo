@@ -32,6 +32,6 @@ resource "azurerm_key_vault_secret" "windows_password" {
   value        = random_password.windows_admin.result
   key_vault_id = azurerm_key_vault.dinkokv.id
 }
-  principal_id         = data.azurerm_client_config.current.object_id
+  principal_id = data.azurerm_client_config.current.object_id
 
 }
