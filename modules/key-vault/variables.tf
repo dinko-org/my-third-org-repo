@@ -22,3 +22,8 @@ variable "sku_name" {
   description = "The name of the keyvault SKU offering"
   type = string
 }
+
+variable "resource_group_name" {
+  description = "The name of the rg where keyvault will be created"
+  type = string
+}
