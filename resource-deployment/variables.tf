@@ -67,5 +67,6 @@ variable "storage_permissions" {
   description = "Secret permissions of the KV."
   type = list(string)
   default     = [
-    "List"
+    "List" 
+]
 }
