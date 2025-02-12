@@ -46,4 +46,27 @@ variable "subnet_address_prefixes" {
   default = ["192.168.1.0/24"]
 }
 
+variable "kv_name" {
+  description = "The name of the keyvault."
+  type = string
+  default = "mykvdinkotest"
+}
 
+variable "secret_permissions" {
+  description = "Secret permissions of the KV."
+  type = list(string)
+  default     = [
+    "Get",
+    "List",
+    "Set",
+    "Delete"
+  ]
+}
+
+variable "storage_permissions" {
+  description = "Secret permissions of the KV."
+  type = list(string)
+  default     = [
+    "List" 
+]
+}
