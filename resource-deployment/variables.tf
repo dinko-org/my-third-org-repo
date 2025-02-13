@@ -62,7 +62,7 @@ variable "secret_permissions" {
     "Delete"
   ]
 }
-
+/*
 variable "storage_permissions" {
   description = "Secret permissions of the KV."
   type = list(string)
@@ -71,7 +71,7 @@ variable "storage_permissions" {
     "List" 
 ]
 }
-
+*/
 variable "sku_name" {
   type        = string
   description = "The Replication Type to use for this storage account"
