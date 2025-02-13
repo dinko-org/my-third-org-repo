@@ -19,7 +19,7 @@ resource "azurerm_key_vault_access_policy" "dinkokvap" {
   
   secret_permissions = var.secret_permissions
   
- # storage_permissions = var.storage_permissions
+  storage_permissions = var.storage_permissions
 
 }
 
