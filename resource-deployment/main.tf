@@ -30,6 +30,6 @@ module "key-vault" {
   resource_group_name      = module.resource-group.name
   sku_name                 = var.sku_name
   secret_permissions       = var.secret_permissions
-#  storage_permissions      = var.storage_permissions
-  user_principal_name      = var.user_principal_name
+  storage_permissions      = var.storage_permissions
+
 }
