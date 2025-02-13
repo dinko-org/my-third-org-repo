@@ -35,8 +35,10 @@ resource "azurerm_key_vault_secret" "windows_password" {
   key_vault_id = azurerm_key_vault.dinkokvtf.id
 }
 
+/*
 resource "azurerm_role_assignment" "keyvault_secrets_access" {
   scope                = azurerm_key_vault.dinkokvtf.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = data.azurerm_client_config.current.object_id
 }
+*/
