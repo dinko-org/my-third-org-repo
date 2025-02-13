@@ -64,7 +64,7 @@ variable "secret_permissions" {
 }
 
 variable "storage_permissions" {
-  description = "Secret permissions of the KV."
+  description = "Storage permissions of the KV."
   type = list(string)
   default     = [
     "Get", 

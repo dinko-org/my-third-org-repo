@@ -7,7 +7,7 @@ resource "azurerm_key_vault" "dinkokvtf" {
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = var.sku_name
   purge_protection_enabled = false
-  enable_rbac_authorization = true
+ # enable_rbac_authorization = true
 
 }
 
