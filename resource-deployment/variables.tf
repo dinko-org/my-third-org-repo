@@ -1,6 +1,6 @@
 variable "resource_group_name" {
   description = "The name of the resource group in which the resources will be created."
-  default = "rg-module-dinkoli"
+  default = "rg-modules-dinko"
 }
 
 variable "location" {
@@ -64,13 +64,12 @@ variable "secret_permissions" {
 }
 
 variable "storage_permissions" {
-  description = "Secret permissions of the KV."
+  description = "Storage permissions of the KV."
   type = list(string)
   default     = [
-    "List" 
+    "Get", 
 ]
 }
-
 variable "sku_name" {
   type        = string
   description = "The Replication Type to use for this storage account"
