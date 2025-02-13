@@ -77,3 +77,9 @@ variable "sku_name" {
   description = "The Replication Type to use for this storage account"
   default     = "standard"
 }
+
+variable "user_principal_name" {
+  type        = string
+  description = "UPN name of the sub owner"
+  default     = "dinko.listar@nordcloud.com"
+}
