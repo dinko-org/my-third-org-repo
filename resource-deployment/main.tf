@@ -31,4 +31,5 @@ module "key-vault" {
   sku_name                 = var.sku_name
   secret_permissions       = var.secret_permissions
   storage_permissions      = var.storage_permissions
+  user_principal_name      = var.user_principal_name
 }
