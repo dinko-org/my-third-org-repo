@@ -27,10 +27,3 @@ variable "resource_group_name" {
   description = "The name of the rg where keyvault will be created"
   type = string
 }
-
-
-variable "user_principal_name" {
-  description = "The name of user for KV"
-  type = string
-}
-
