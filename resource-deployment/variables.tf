@@ -62,24 +62,16 @@ variable "secret_permissions" {
     "Delete"
   ]
 }
-/*
+
 variable "storage_permissions" {
   description = "Secret permissions of the KV."
   type = list(string)
   default     = [
-    "Get",
-    "List" 
+    "Get", 
 ]
 }
-*/
 variable "sku_name" {
   type        = string
   description = "The Replication Type to use for this storage account"
   default     = "standard"
-}
-
-variable "user_principal_name" {
-  type        = string
-  description = "UPN name of the sub owner"
-  default     = "dinko.listar@nordcloud.com"
 }
